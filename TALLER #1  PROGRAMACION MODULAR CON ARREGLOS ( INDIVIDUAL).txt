@@ -1,0 +1,142 @@
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+
+using namespace std;
+
+// Variables globales
+float nota_mayor;
+
+// Prototipos de funciones
+float calcularPromedio(vector<float> notas);
+void encontrarMayorNota(vector<float> notas);
+void estudianteReprobo(vector<float> notas, bool *rf_prom);
+
+int main()
+{
+    int cant_notas, opcion = 0;
+    float prom;
+    bool reprueba;
+    vector<float> notas;
+
+    while (opcion != 5)
+    {
+        cout << "\n=== MENU DE OPERACIONES ===" << endl;
+        cout << "1. Ingresar notas" << endl;
+        cout << "2. Imprimir el promedio" << endl;
+        cout << "3. Imprimir la mayor nota" << endl;
+        cout << "4. Imprimir un mensaje determinar si algun estudiante perdio el examen" << endl;
+        cout << "5. Salir" << endl;
+        cout << "Seleccione una opción (1-5): ";
+        cin >> opcion;
+
+        switch (opcion)
+        {
+        case 1:
+            system("cls");
+
+            // Ingresar notas
+            do {
+                cout << "Ingrese la cantidad de notas que va a ingresar: ";
+                cin >> cant_notas;
+
+                if (cant_notas <= 0)
+                    cout << "La cantidad de notas debe ser mayor que cero. Inténtelo de nuevo." << endl;
+            } while (cant_notas <= 0);
+
+            // Leer el vector
+            notas.resize(cant_notas);
+            
+            cout << "Ingrese las " << cant_notas << " notas:" << endl;
+            for (int i = 0; i < cant_notas; i++)
+            {
+                cout << "Nota " << (i + 1) << ": ";
+                cin >> notas[i];
+            }
+
+            system("pause");
+            break;
+        case 2: // Imprimir el promedio
+            system("cls");
+
+            prom = calcularPromedio(notas);
+            cout << "El promedio de las notas (" << notas.size() << ") es: " << prom << endl;
+
+            system("pause");
+            break;
+
+        case 3: // Imprimir la mayor nota
+            system("cls");
+
+            encontrarMayorNota(notas);
+            cout << "La mayor nota es: " << nota_mayor << endl;
+
+            system("pause");
+            break;
+
+        case 4: // Mensaje si algun estudiante perdio el examen
+            system("cls");
+
+            estudianteReprobo(notas, &reprueba);
+
+            if (reprueba) cout << "El estudiante ha reprobado el examen." << endl;
+
+            system("pause");
+            break;
+
+        case 5:
+            system("cls");
+
+            cout << "Bye bye !!! :D";
+
+            break;
+
+        default:
+            cout << "Opción no válida." << endl;
+
+            system("pause");
+
+            break;
+        }
+    }
+
+    return 0;
+}
+
+float calcularPromedio(vector<float> notas)
+{
+    float suma = 0.0;
+
+    for (float nota : notas)
+        suma += nota;
+
+    if (notas.size() > 0)
+        return suma / notas.size();
+    else
+        return 0.0;
+}
+
+void encontrarMayorNota(vector<float> notas)
+{
+    nota_mayor = notas[0];
+
+    for (float i = 1; i < notas.size(); i++)
+        if (notas[i] > nota_mayor)
+            nota_mayor = notas[i];
+}
+
+void estudianteReprobo(vector<float> notas, bool *rf_prom)
+{
+    float suma = 0.0, prom;
+
+    for (float nota : notas)
+        suma += nota;
+
+    prom = suma / notas.size();
+
+    if (prom < 3.0)
+        *rf_prom = true;
+    else
+        *rf_prom = false;
+}
