@@ -11,7 +11,7 @@ float nota_mayor;
 // Prototipos de funciones
 float calcularPromedio(vector<float> notas);
 void encontrarMayorNota(vector<float> notas);
-void estudianteReprobo(vector<float> notas, bool *rf_prom);
+void estudianteReprobo(vector<float> notas, bool *rf_rep);
 
 int main()
 {
@@ -20,15 +20,16 @@ int main()
     bool reprueba;
     vector<float> notas;
 
-    while (opcion != 5)
+    while (opcion != 6)
     {
         cout << "\n=== MENU DE OPERACIONES ===" << endl;
         cout << "1. Ingresar notas" << endl;
         cout << "2. Imprimir el promedio" << endl;
         cout << "3. Imprimir la mayor nota" << endl;
         cout << "4. Imprimir un mensaje determinar si algun estudiante perdio el examen" << endl;
-        cout << "5. Salir" << endl;
-        cout << "Seleccione una opción (1-5): ";
+        cout << "5. Imprimir notas" << endl;
+        cout << "6. Salir" << endl;
+        cout << "Seleccione una opción (1-6): ";
         cin >> opcion;
 
         switch (opcion)
@@ -60,43 +61,81 @@ int main()
         case 2: // Imprimir el promedio
             system("cls");
 
-            prom = calcularPromedio(notas);
-            cout << "El promedio de las notas (" << notas.size() << ") es: " << prom << endl;
+            if (!(notas.size() == 0))
+            {
+                prom = calcularPromedio(notas);
+                cout << "El promedio de las notas (" << notas.size() << ") es: " << prom << endl;
+
+                system("pause");
+                break;
+            }
+
+            cout << "No hay notas registradas." << endl;
 
             system("pause");
             break;
-
         case 3: // Imprimir la mayor nota
             system("cls");
 
-            encontrarMayorNota(notas);
-            cout << "La mayor nota es: " << nota_mayor << endl;
+            if (!(notas.size() == 0))
+            {
+                encontrarMayorNota(notas);
+                cout << "La mayor nota es: " << nota_mayor << endl;
+
+                system("pause");
+                break;
+            }
+
+            cout << "No hay notas registradas." << endl;
 
             system("pause");
             break;
-
         case 4: // Mensaje si algun estudiante perdio el examen
             system("cls");
 
-            estudianteReprobo(notas, &reprueba);
+            if (!(notas.size() == 0))
+            {
+                reprueba = false;
+                estudianteReprobo(notas, &reprueba);
 
-            if (reprueba) cout << "El estudiante ha reprobado el examen." << endl;
+                if (reprueba) cout << "Al menos un estudiante ha reprobado el examen." << endl;
+
+                system("pause");
+                break;
+            }
+
+            cout << "No hay notas registradas." << endl;
 
             system("pause");
             break;
+        case 5: // Imprimir notas
+            system("cls");
 
-        case 5:
+            if (!(notas.size() == 0))
+            {
+                cout << "Notas registradas: " << endl;
+
+                for (int i = 0; i < notas.size(); i++)
+                    cout << "Nota " << (i + 1) << ": " << notas[i] << endl;
+
+                system("pause");
+                break;
+            }
+
+            cout << "No hay notas registradas." << endl;
+            
+            system("pause");
+            break;
+        case 6:
             system("cls");
 
             cout << "Bye bye !!! :D";
 
             break;
-
         default:
             cout << "Opción no válida." << endl;
 
             system("pause");
-
             break;
         }
     }
@@ -126,17 +165,9 @@ void encontrarMayorNota(vector<float> notas)
             nota_mayor = notas[i];
 }
 
-void estudianteReprobo(vector<float> notas, bool *rf_prom)
+void estudianteReprobo(vector<float> notas, bool *rf_rep)
 {
-    float suma = 0.0, prom;
-
-    for (float nota : notas)
-        suma += nota;
-
-    prom = suma / notas.size();
-
-    if (prom < 3.0)
-        *rf_prom = true;
-    else
-        *rf_prom = false;
+    for (int i = 0; i < notas.size() && !(*rf_rep); i++)
+        if (notas[i] < 3.0)
+            *rf_rep = true;
 }
